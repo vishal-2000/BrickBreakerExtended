@@ -10,6 +10,7 @@ class Brick:
         self.color = ""
         self.broken = "NO" # implies the brick is not broken yet
         self.powerup_associated = powerup_associated
+        self.type = "NORMAL"
 
     def positionUpdate(self):
         if 1: #self.color != "NONE":
@@ -78,3 +79,30 @@ class ExplodingBrick(Brick):
     def __init__(self, x, y, powerup_associated = None):
         Brick.__init__(self, 1, x, y, powerup_associated)
         self.color = "YELLOW"
+
+class RainbowBrick(Brick):
+    def __init__(self, x, y, powerup_associated = None):
+        Brick.__init__(self, 3, x, y, powerup_associated)
+        self.color = "RED"
+        self.type = "RAINBOW" # type changes to normal the moment the block gets hit by the ball
+
+    def handleCollision(self):
+        self.type = "NORMAL"
+        return super().handleCollision()
+
+    def changeColor(self):
+        if self.type != "RAINBOW" or config.FRAME_COUNT%config.RAINBOW_COLOR_CHANGE_RATE != 0:
+            return
+
+        if self.color == "RED":
+            self.color = "BLUE"
+            self.strength = 2
+            return
+        if self.color == "BLUE":
+            self.color = "GREEN"
+            self.strength = 1
+            return
+        if self.color == "GREEN":
+            self.color = "RED"
+            self.strength = 3
+            return

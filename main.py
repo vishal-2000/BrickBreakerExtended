@@ -93,8 +93,9 @@ while(1):
             game_over = False
             break
 
-    #for brick in brick_array:
-    #    brick.positionUpdate()
+    for brick in brick_array:
+        if brick.type == "RAINBOW":
+            brick.changeColor()
     temp = 0
     for brick in brick_array:
         if brick.color!="NONE" and brick.color!="WHITE":

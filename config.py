@@ -33,6 +33,7 @@ BALL_INITIAL_POS = [PADDLE_INITIAL_POS[0] + (PADDLE_WIDTH - BALL_WIDTH)//2, PADD
 # Brick Width
 BRICK_WIDTH = 5
 BRICK_SHAPE = '{|||}'
+RAINBOW_COLOR_CHANGE_RATE = 4 # implies once in every 12 frames
 
 # Power ups
 POWERUP_VEL = [0, FRAME_RATE//4] # (x, y)

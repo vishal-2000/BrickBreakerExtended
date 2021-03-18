@@ -1,7 +1,7 @@
 # Level 1 brick map
 # This map creates and returns brick object array
 from config import BRICK_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, BOTTOM_EMPTY_SPACE
-from brick import RedBrick, BlueBrick, GreenBrick, WhiteBrick, ExplodingBrick
+from brick import RedBrick, BlueBrick, GreenBrick, WhiteBrick, ExplodingBrick, RainbowBrick
 from powerup import PowerUp, EpPowerUp, SpPowerUp, BmPowerUp, FbPowerUp, TbPowerUp, PgPowerUp
 # Organization 
 # layer 7 b g r b b r g b
@@ -10,7 +10,9 @@ from powerup import PowerUp, EpPowerUp, SpPowerUp, BmPowerUp, FbPowerUp, TbPower
 # layer 4       b g
 # layer 3 y g g g y g g g
 # layer 2 g y b y y y r b 
-# layer 1 b w y r r r y r
+# layer 1 b w y c c r y r   
+# here c implies rainbow colored brick
+# g - green, r - red, b - blue, y - exploding yellow brick
 
 def createMapLevel1(brick_array, powerup_array):
     # Creating bricks and their respective powerups
@@ -61,8 +63,8 @@ def createMapLevel1(brick_array, powerup_array):
     brick_array.append(BlueBrick((FRAME_WIDTH//2) - 4*BRICK_WIDTH, 10))
     brick_array.append(WhiteBrick((FRAME_WIDTH//2) - 3*BRICK_WIDTH, 10))
     brick_array.append(ExplodingBrick((FRAME_WIDTH//2) - 2*BRICK_WIDTH, 10))
-    brick_array.append(RedBrick((FRAME_WIDTH//2) - 1*BRICK_WIDTH, 10))
-    brick_array.append(RedBrick((FRAME_WIDTH//2) - 0*BRICK_WIDTH, 10))
+    brick_array.append(RainbowBrick((FRAME_WIDTH//2) - 1*BRICK_WIDTH, 10))
+    brick_array.append(RainbowBrick((FRAME_WIDTH//2) - 0*BRICK_WIDTH, 10))
     brick_array.append(RedBrick((FRAME_WIDTH//2) + 1*BRICK_WIDTH, 10))
     brick_array.append(ExplodingBrick((FRAME_WIDTH//2) + 2*BRICK_WIDTH, 10))
     brick_array.append(RedBrick((FRAME_WIDTH//2) + 3*BRICK_WIDTH, 10))

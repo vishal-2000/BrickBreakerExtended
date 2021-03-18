@@ -159,7 +159,7 @@ class Frame:
                                 elif brick_array[brick_iterator].color == "WHITE":
                                     print(Fore.WHITE + brick_array[brick_iterator].shape[k], end="")
                                 elif brick_array[brick_iterator].color == "NONE":  # Indicates broken brick
-                                    print(Fore.WHITE + self.matrix[i][j+k], end ="")
+                                        print(Fore.WHITE + self.matrix[i][j+k], end ="")
                             count = j + config.BRICK_WIDTH
                             brick_iterator += 1
                         else:

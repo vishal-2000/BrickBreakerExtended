@@ -15,6 +15,10 @@ The Brick Breaker Game using python3 and OOPS concepts (DASS course assignment (
     - Level 3 == Boss Level 
 - You can choose a level directly from the start screen. Then you can start playing it. The remaining lives will remain constant accross the levels (it won't change on simply upgrading the level)
 
+### Falling Bricks
+- In each level, you will be given 100 frames time. After crossing 100th frame, the bricks will drif downward every time your ball hits your paddle
+- The moment a brick comes close enough to your paddle in such a way that paddle's locomotive freedom is restricted, then the game ends. It is a GAMEOVER scenario
+
 ## How to run the game
 ### Dependencies
 - Python 3
