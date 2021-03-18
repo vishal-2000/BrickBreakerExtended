@@ -11,6 +11,14 @@ class Brick:
         self.broken = "NO" # implies the brick is not broken yet
         self.powerup_associated = powerup_associated
 
+    def positionUpdate(self):
+        if 1: #self.color != "NONE":
+            if config.FRAME_COUNT_PER_LEVEL > config.FALLING_BRICK_FRAME_NUMBER:
+                self.y = self.y + 1
+                if self.y >= config.PADDLE_INITIAL_POS[1]:
+                    from miscellaneous import gameOver
+                    gameOver()
+
     def colorChange(self): # used to decrease color on collision
         if self.color == "RED": 
             self.color = "BLUE"
@@ -18,12 +26,15 @@ class Brick:
             self.color = "GREEN"
         elif self.color == "GREEN" or self.color == "YELLOW":
             self.color = "NONE" # implies the brick is broken
+            #self.x = 0
+            #self.y = 0
 
     def handleCollision(self):
         if self.color == "WHITE" or self.color == "NONE":
             return
         if self.color == "GREEN" or self.color == "YELLOW":
             self.color = "NONE"
+            self.broken = "YES"
             if self.powerup_associated!=None:
                 (self.powerup_associated).releasePowerUp()
                 return self.powerup_associated
@@ -36,6 +47,7 @@ class Brick:
         if self.color == "NONE":
             return None
         self.color = "NONE"
+        self.broken = "YES"
         self.strength = 0
         if self.powerup_associated!=None:
                 (self.powerup_associated).releasePowerUp()

@@ -2,10 +2,12 @@
 GAME_NAME = "The Brick Breaker Game"
 START_TIME = 0.0 # this will be set by main.py and will be updated by the Frame class
 FRAME_COUNT = 0 # this will be updated by the Frame class
+FRAME_COUNT_PER_LEVEL = 0
 NO_OF_LIVES = 3 # Life count
 SCORE = 0
 PENALTY = 0
 TOTAL_SCORE = 0
+FALLING_BRICK_FRAME_NUMBER = 100
 
 # Frame
 FRAME_HEIGHT = 30

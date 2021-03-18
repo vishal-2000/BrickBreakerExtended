@@ -111,12 +111,14 @@ class Ball:
         if vertical_collision == True:
             self.velY = -1 * self.velY
 
-    def checkPaddleCollision(self, paddle1):
+    def checkPaddleCollision(self, paddle1, brick_array):
         if self.y == paddle1.y: # a case where the ball intersects the paddle (error case)
             if (self.x < (paddle1.x + paddle1.width)) and self.x > paddle1.x-config.BALL_WIDTH:
                 #print('Invalid Collision')
                 return True # implies game over
         if self.y == paddle1.y-1: # ball collides the upside of the paddle
+            for brick in brick_array:
+                brick.positionUpdate()
             if (self.x < (paddle1.x + paddle1.width)) and self.x > paddle1.x-config.BALL_WIDTH and self.velY > 0:
                 if self.ballWillBeGrabbed == True:
                     self.velY = 0
@@ -134,7 +136,7 @@ class Ball:
     def checkCollision(self, paddle1, brick_array, powerup_array): # checks and handles collision
         game_over = False
         # check paddle collision
-        game_over = self.checkPaddleCollision(paddle1)
+        game_over = self.checkPaddleCollision(paddle1, brick_array)
         # check brick collision
         self.checkBrickCollision(brick_array, powerup_array)
         # check frame collision

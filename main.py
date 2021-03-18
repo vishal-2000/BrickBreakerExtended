@@ -1,24 +1,46 @@
 # Created by Vishal Reddy Mandadi
+from levels.level1 import createMapLevel1
+from levels.level2 import createMapLevel2
+from levels.boss_level import createMapLevel3
 
 import config
-from brickMap1 import createMapLevel1
 from paddle import Paddle
 from ball import Ball
 from frame import Frame
 from os import system
 from time import sleep, time
-import input
-from miscellaneous import ballDead, gameOver, gameWon
+import input_template
+from miscellaneous import ballDead, gameOver, gameWon, levelUp, levelWon
+
 
 config.START_TIME = time() # in seconds
 # initialize objects of the game
 paddle1 = Paddle()
 ball_array = [ Ball() ] # initially contains single ball
 frame1 = Frame(config.FRAME_WIDTH, config.FRAME_HEIGHT)
-get_object = input.Get()
+get_object = input_template.Get()
 brick_array = []
 powerup_array = []
-createMapLevel1(brick_array, powerup_array)
+
+system('clear')
+
+level = int(input("Choose a level from 1-3: "))
+
+while(1):
+    #print(level)
+    if level == 1:
+        createMapLevel1(brick_array, powerup_array)
+        break
+    elif level == 2:
+        createMapLevel2(brick_array, powerup_array)
+        break
+    elif level == 3:
+        createMapLevel3(brick_array, powerup_array)
+        break
+    else:
+        print("\n")
+        level = int(input("Invalid input, Please input a valid level from 1, 2 and 3: "))
+
 
 #paddle1.printPaddle()
 
@@ -35,7 +57,7 @@ system('setterm -cursor off')
 # Handling input and main game loop
 while(1):
     #sleep(2/config.FRAME_RATE)
-    c = input.input_to(get_object, 2/config.FRAME_RATE) # here 2nd arguement mentions timeout (waiting time untill an input is recieved)
+    c = input_template.input_to(get_object, 2/config.FRAME_RATE) # here 2nd arguement mentions timeout (waiting time untill an input is recieved)
     system('clear')
     #system('setterm -cursor off')
     if c=='\x03':
@@ -48,6 +70,13 @@ while(1):
         paddle1.moveRight()
     elif c=='a':
         paddle1.moveLeft()
+    elif c=='s': # levelUp
+        system('clear')
+        system('setterm -cursor on')
+        print("Jumping to the next level, Please wait ...\n")
+        level, ball_array, powerup_array, brick_array = levelUp(level, ball_array, powerup_array, brick_array, paddle1, frame1)
+
+
     frame1.setBoard(ball_array, powerup_array) # erase the previous positions 
     for ball1 in ball_array:
         ball1.moveBall(c) # now move ball
@@ -63,6 +92,9 @@ while(1):
         if ball1.alive == True:
             game_over = False
             break
+
+    #for brick in brick_array:
+    #    brick.positionUpdate()
     temp = 0
     for brick in brick_array:
         if brick.color!="NONE" and brick.color!="WHITE":
@@ -71,28 +103,14 @@ while(1):
     if temp == 0:
         system('clear')
         frame1.printFrame(brick_array, ball_array)
-        gameWon()
+        level, ball_array, powerup_array, brick_array = levelWon(level, ball_array, powerup_array, brick_array, paddle1, frame1)
+
     if game_over == True:
         system('clear')
         frame1.printFrame(brick_array, ball_array)
         ballDead()
-        #if ball1.life==0:
-        #    system('clear')
-        #    frame1.printFrame(brick_array, ball1)
-        #    print('G A M E O V E R')
-        #    sleep(1)
-        #    system('setterm -cursor on')
-        #    exit(1)
-        #else:
-        #    frame1.printFrame(brick_array, ball1)
-        #    sleep(1)
         ball_array = []
         ball_array.append(Ball())
-        #ball1.x = config.BALL_INITIAL_POS[0]
-        #ball1.y = config.BALL_INITIAL_POS[1]
-        #ball1.velY = config.BALL_INIT_VEL[0]
-        #ball1.velX = config.BALL_INIT_VEL[1]
-        #ball1.ballGrabbed = True
         paddle1.x = config.PADDLE_INITIAL_POS[0]
         paddle1.y = config.PADDLE_INITIAL_POS[1]
         # deactivate the active powerups
@@ -105,3 +123,5 @@ while(1):
     frame1.setBall(ball_array) # set ball
     frame1.setPowerUp(powerup_array)
     frame1.printFrame(brick_array, ball_array)
+
+

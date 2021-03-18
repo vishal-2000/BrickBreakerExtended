@@ -11,6 +11,24 @@ class Frame:
         self.score_height = config.SCORE_BOX_HEIGHT
         self.matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # printing gamebox
         self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # for printing score and player info
+        
+        # setting broder of the frame
+        for i in range(self.width):
+            self.matrix[0][i] = '-'
+            self.matrix[self.height-1][i] = '-'
+        for i in range(self.height):
+            self.matrix[i][0] = '|'
+            self.matrix[i][self.width-1] = '|'
+
+    def reset(self):
+        self.width = config.FRAME_WIDTH
+        self.height = config.FRAME_HEIGHT
+        self.score_height = config.SCORE_BOX_HEIGHT
+        self.matrix = None
+        self.score_matrix = None
+        self.matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # printing gamebox
+        self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # for printing score and player info
+        
         # setting broder of the frame
         for i in range(self.width):
             self.matrix[0][i] = '-'
@@ -21,6 +39,7 @@ class Frame:
 
     def setScoreBox(self, ball1):
         config.FRAME_COUNT += 1
+        config.FRAME_COUNT_PER_LEVEL += 1
         current_time = time()
         time_elapsed = current_time - config.START_TIME
         for i in range(config.SCORE_BOX_HEIGHT):
@@ -149,5 +168,4 @@ class Frame:
                         print(Fore.WHITE + self.matrix[i][j], end ="")
                 else:
                     print(Fore.WHITE + self.matrix[i][j], end ="")
-            print('')
-            
+            print('')        
