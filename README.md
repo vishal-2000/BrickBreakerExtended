@@ -3,7 +3,7 @@ Extension of Assignment 2
 The Brick Breaker Game using python3 and OOPS concepts (DASS course assignment (14th to 17th Feb))
 ## Creator information
 - Created by Vishal Reddy Mandadi 
-- DASS Course assignment 2
+- DASS Course assignment 3 (extension of assignment 2)
 
 ## New Features (Through Assignment 3)
 ### Controls
@@ -25,6 +25,19 @@ The Brick Breaker Game using python3 and OOPS concepts (DASS course assignment (
 ### Powerups 2.0
 - Acceleration due to gravity added
 - The powerups initial velocity will be same as that of the ball when it hits the brick
+
+### Shooting Paddle Powerup
+- The paddle appearance changes 
+- The paddle can shoot bullets at the bricks as long as this powerup is active
+- The remaining time is printed in the score box last row
+
+### Boss level
+- Boss is a UFO
+- Boss can drop bombs (instead of regular intervals, I used probability with the ball having a 0.02% chance of dropping a bomb per frame)
+- Boss Strength = 8
+- When strength falls to 4, the boss will protect itself by spawning a layer of rainbow bricks. 
+- When strength further falls to 2, the boss will protect itself by spawning another layer of rainbow bricks
+- Killing the boss ends the game and you will be announced as a victor.
 
 ## How to run the game
 ### Dependencies
@@ -77,6 +90,7 @@ Catch the powerups with the paddle to activate them (they are hidden in the brea
 - '$BM$' - Ball multiplier (Introduces an extraball into the game which starts from a certain initial position)
 - '$FB$' - Fast Ball (Increases the speed of the ball)
 - '$TB$' - Through Ball (The ball can go undeflected by the bricks and all those bricks which come into contact will be smashed (including the unbreakable type))
+- '$ShP$' - Shooting paddle powerup
 ### Note:
 - More than two powerups can be active at a time
 - if EP and SP are both activated, the one which is caught later will be acitive (I implemented this only in this case (will change it if the TA insists))

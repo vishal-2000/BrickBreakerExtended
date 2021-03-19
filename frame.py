@@ -1,5 +1,6 @@
 # Created by Vishal Reddy Mandadi (started working on Feb 12 at 11:35pm)
 # Used to generate game display frames
+from powerup import ShPPowerUp
 import config
 import paddle
 from colorama import Fore
@@ -10,7 +11,7 @@ class Frame:
         self.height = config.FRAME_HEIGHT
         self.score_height = config.SCORE_BOX_HEIGHT
         self.matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # printing gamebox
-        self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # for printing score and player info
+        self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.score_height)] # for printing score and player info
         
         # setting broder of the frame
         for i in range(self.width):
@@ -27,7 +28,7 @@ class Frame:
         self.matrix = None
         self.score_matrix = None
         self.matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # printing gamebox
-        self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.height)] # for printing score and player info
+        self.score_matrix = [[' ' for i in range(self.width)] for j in range(self.score_height)] # for printing score and player info
         
         # setting broder of the frame
         for i in range(self.width):
@@ -37,7 +38,7 @@ class Frame:
             self.matrix[i][0] = '|'
             self.matrix[i][self.width-1] = '|'
 
-    def setScoreBox(self, ball1):
+    def setScoreBox(self, ball1, powerup_array, boss):
         config.FRAME_COUNT += 1
         config.FRAME_COUNT_PER_LEVEL += 1
         current_time = time()
@@ -59,6 +60,14 @@ class Frame:
         velYString = 'Velocity of ball (Vertical): ' + str(ball1.velY)
         frameCountString = 'Frame count: ' + str(config.FRAME_COUNT)
         timeElapsedString = 'Time elapsed(in S): ' + str(round(time_elapsed, 2))
+        ShP_powerupRemainingTime = 'ShP Remaining time: NA'
+        if boss != None:
+            bossHealth = 'Boss Health: ' + ('|'*boss.strength) + ('*'*(config.BOSS_INITIAL_HEALTH - boss.strength))
+        else:
+            bossHealth = 'Boss Health: ' + 'NA'
+        for i in powerup_array:
+            if i.type=="ShP" and i.active == True:
+                ShP_powerupRemainingTime = 'ShP Remaining time: ' + str(config.POWERUP_TIMEPERIOD - time() + i.start_time)
         for i in range(len(config.GAME_NAME)):
             self.score_matrix[1][(config.FRAME_WIDTH - len(config.GAME_NAME))//2 + i] = config.GAME_NAME[i]
         for i in range(len(scoreString)):
@@ -77,10 +86,15 @@ class Frame:
             self.score_matrix[5][i+1] = velYString[i]
         for i in range(len(timeElapsedString)):
             self.score_matrix[5][config.FRAME_WIDTH - 2 - len(timeElapsedString) + i] = timeElapsedString[i]
+        for i in range(len(ShP_powerupRemainingTime)):
+            self.score_matrix[6][i+1] = ShP_powerupRemainingTime[i]
+        for i in range(len(bossHealth)):
+            self.score_matrix[6][config.FRAME_WIDTH - 2 - len(bossHealth) + i] = bossHealth[i]
 
-    def setBoard(self, ball_array, powerup_array):
+    def setBoard(self, ball_array, powerup_array, bullet_array):
         for i in range(1, self.width-1):
             self.matrix[config.FRAME_HEIGHT - config.BOTTOM_EMPTY_SPACE][i] = ' '
+            self.matrix[1][i] = ' ' # Clearing boss positions
         for balli in ball_array:
             for i in range(config.BALL_WIDTH):
                 if balli.y < 1 or balli.x > config.FRAME_WIDTH - 2:
@@ -90,6 +104,16 @@ class Frame:
                 else:
                     if balli.alive == True:
                         self.matrix[balli.y][balli.x + i] = ' '
+        for bullet in bullet_array:
+            for i in range(config.BULLET_WIDTH):
+                if bullet.y < 1 or bullet.x > config.FRAME_WIDTH - 2:
+                    if bullet.alive == True:
+                        print("Invalid bullet position 1")
+                        exit(1)
+                else:
+                    if bullet.alive == True:
+                        self.matrix[bullet.y][bullet.x + i] = ' '
+
         for powerup in powerup_array:
             if powerup.appear == False:
                 continue
@@ -108,6 +132,13 @@ class Frame:
         for i in range(paddle1.width):
             self.matrix[config.FRAME_HEIGHT - config.BOTTOM_EMPTY_SPACE][paddle1.x + i] = paddle1.shape[i]
 
+    def setBoss(self, boss1):
+        #self.setBoard()
+        if boss1 == None:
+            return
+        for i in range(boss1.width):
+            self.matrix[boss1.y][boss1.x + i] = boss1.shape[i]
+
     def setBall(self, ball_array):
         #self.setBoard()
         for balli in ball_array:
@@ -120,19 +151,30 @@ class Frame:
                         exit(1)
                     self.matrix[balli.y][balli.x + i] = balli.shape[i]
 
+    def setBullet(self, bullet_array):
+        for bullet in bullet_array:
+            if bullet.alive == True:
+                for i in range(config.BULLET_WIDTH):
+                    if bullet.alive == False:
+                        continue
+                    if bullet.y < 1 or bullet.x + i > config.FRAME_WIDTH - 2:
+                        print("Invalid bullet position 2")
+                        exit(1)
+                    self.matrix[bullet.y][bullet.x + i] = bullet.shape[i]
+
     def setPowerUp(self, powerup_array):
         for powerup in powerup_array:
             if powerup.appear == True:
                 for i in range(len(powerup.shape)):
                     self.matrix[powerup.y][powerup.x + i] = powerup.shape[i]
 
-    def printFrame(self, brick_array, ball_array):
+    def printFrame(self, brick_array, ball_array, powerup_array, boss):
 
         # time elapsed and frame count will be set by setScoreBox function
         # calculating penalty
         config.PENALTY = int(config.FRAME_COUNT//config.FRAME_RATE)
         # Printing Score Box
-        self.setScoreBox(ball_array[0])
+        self.setScoreBox(ball_array[0], powerup_array, boss)
         for i in range(config.SCORE_BOX_HEIGHT):
             for j in range(config.FRAME_WIDTH):
                 print(self.score_matrix[i][j], end='')

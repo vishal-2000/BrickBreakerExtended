@@ -8,6 +8,7 @@ class Paddle:
         self.x = config.PADDLE_INITIAL_POS[0]
         self.y = config.PADDLE_INITIAL_POS[1]
         self.shape = config.PADDLE_SHAPE
+        self.shooting = False
 
     def printPaddle(self):
         print('|'+'-'*(self.width-2) + '|')
@@ -23,4 +24,5 @@ class Paddle:
         self.x = self.x - 1
         if self.x <= 0: 
             self.x = self.x + 1
+
     

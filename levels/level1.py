@@ -2,7 +2,7 @@
 # This map creates and returns brick object array
 from config import BRICK_WIDTH, FRAME_HEIGHT, FRAME_WIDTH, BOTTOM_EMPTY_SPACE
 from brick import RedBrick, BlueBrick, GreenBrick, WhiteBrick, ExplodingBrick, RainbowBrick
-from powerup import PowerUp, EpPowerUp, SpPowerUp, BmPowerUp, FbPowerUp, TbPowerUp, PgPowerUp
+from powerup import PowerUp, EpPowerUp, SpPowerUp, BmPowerUp, FbPowerUp, TbPowerUp, PgPowerUp, ShPPowerUp
 # Organization 
 # layer 7 b g r b b r g b
 # layer 6   r b g g b r
@@ -66,5 +66,5 @@ def createMapLevel1(brick_array, powerup_array):
     brick_array.append(RainbowBrick((FRAME_WIDTH//2) - 1*BRICK_WIDTH, 10))
     brick_array.append(RainbowBrick((FRAME_WIDTH//2) - 0*BRICK_WIDTH, 10))
     brick_array.append(RedBrick((FRAME_WIDTH//2) + 1*BRICK_WIDTH, 10))
-    brick_array.append(ExplodingBrick((FRAME_WIDTH//2) + 2*BRICK_WIDTH, 10))
+    brick_array.append(ExplodingBrick((FRAME_WIDTH//2) + 2*BRICK_WIDTH, 10, ShPPowerUp((FRAME_WIDTH//2) + 2*BRICK_WIDTH, 10)))
     brick_array.append(RedBrick((FRAME_WIDTH//2) + 3*BRICK_WIDTH, 10))

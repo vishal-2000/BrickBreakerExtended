@@ -1,6 +1,9 @@
+from miscellaneous import gameWon
+from boss import Boss
 import queue
 import config
 from queue import Queue
+from time import sleep
 
 class Ball:
     def __init__(self):
@@ -133,12 +136,46 @@ class Ball:
                             self.velX = self.velX + (self.x - paddle1.x)*1 - (paddle1.width-config.BALL_WIDTH)//2
         return False # implies game not over
 
-    def checkCollision(self, paddle1, brick_array, powerup_array): # checks and handles collision
+    def checkBossCollision(self, boss, brick_array):
+        if boss == None:
+            return
+        #print(self.y, boss.y)
+        #sleep(0.2)
+        game_over = False
+        if self.y == boss.y + 1: # ball collides the downside of the boss
+            #print("Collision")
+            #sleep(1)
+            if (self.x < (boss.x + boss.width)) and (self.x > boss.x-config.BALL_WIDTH) and self.velY < 0:
+                self.velY = -1 * self.velY
+                #print("Collision")
+                #sleep(1)
+                game_over = boss.handleCollision(brick_array)
+            if game_over == True:
+                gameWon()
+        if self.y == boss.y: # a case where the ball intersects the boss (error case)
+            if (self.x < (boss.x + boss.width)) and self.x > boss.x-config.BALL_WIDTH:
+                print('Invalid Ball and boss positioning')
+                exit(1)
+            if (self.x + config.BALL_WIDTH == boss.x and self.velX > 0) or (self.x == boss.x + boss.width or self.velX < 0):
+                self.velX = -1 * self.velX
+                if self.velY < 0:
+                    self.velY = -1 * self.velY
+                game_over = boss.handleCollision(brick_array)
+            if self.x + config.BALL_WIDTH == boss.x or self.x == boss.x + boss.width:
+                self.y = boss.y + 1
+                
+        if game_over == True:
+            gameWon()
+
+    def checkCollision(self, paddle1, brick_array, powerup_array, boss): # checks and handles collision
         game_over = False
         # check paddle collision
         game_over = self.checkPaddleCollision(paddle1, brick_array)
         # check brick collision
         self.checkBrickCollision(brick_array, powerup_array)
+        # Check boss collision
+        if boss != None:
+            self.checkBossCollision(boss, brick_array)
         # check frame collision
         if self.y >= config.FRAME_HEIGHT - 1:
             game_over = True # implies game over

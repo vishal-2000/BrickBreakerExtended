@@ -10,6 +10,7 @@ class PowerUp:
         self.active = False
         self.appear = False # will be true when powerup is released until it's caught
         self.start_time = 0 # in sec
+        self.type = ""
     def movePowerUp(self):
         if self.appear==False:
             return
@@ -83,9 +84,14 @@ class EpPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.EP_POWERUP_SHAPE
+        self.type = 'EP'
     def activatePowerUp(self, paddle1, ball1):
-        paddle1.width = config.PADDLE_WIDTH + 2
-        paddle1.shape = '|-------|'
+        paddle1.width = paddle1.width + 2
+        temp = list(paddle1.shape)
+        temp[-1] = paddle1.shape[1]
+        temp.append(paddle1.shape[1])
+        temp.append(paddle1.shape[-1])
+        paddle1.shape = ''.join(temp)
         super().activatePowerUp(paddle1, ball1)
     def deactivatePowerUp(self, paddle1, ball1):
         paddle1.width = config.PADDLE_WIDTH
@@ -96,9 +102,14 @@ class SpPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.SP_POWERUP_SHAPE
+        self.type = 'SP'
     def activatePowerUp(self, paddle1, ball1):
-        paddle1.width = config.PADDLE_WIDTH - 2
-        paddle1.shape = '|---|'
+        paddle1.width = paddle1.width - 2
+        temp = list(paddle1.shape)
+        temp.pop(-2)
+        temp.pop(-2)
+        paddle1.shape = ''.join(temp)
+        #paddle1.shape = '|---|'
         super().activatePowerUp(paddle1, ball1)
     def deactivatePowerUp(self, paddle1, ball1):
         paddle1.width = config.PADDLE_WIDTH
@@ -109,6 +120,7 @@ class BmPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.BM_POWERUP_SHAPE
+        self.type = 'BM'
     def activatePowerUp(self, paddle1, ball_array):
         ballx = Ball()
         ballx.velY = config.BALL_INIT_VEL[1]
@@ -123,6 +135,7 @@ class FbPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.FB_POWERUP_SHAPE
+        self.type = 'FB'
     def activatePowerUp(self, paddle1, ball_array):
         for ball1 in ball_array:
             if ball1.velY!=0:
@@ -138,6 +151,7 @@ class TbPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.TB_POWERUP_SHAPE
+        self.type = 'TB'
     def activatePowerUp(self, paddle1, ball_array):
         for ball1 in ball_array:
             ball1.thruBall = True
@@ -151,6 +165,7 @@ class PgPowerUp(PowerUp):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.shape = config.PG_POWERUP_SHAPE
+        self.type = 'PG'
     def activatePowerUp(self, paddle1, ball_array):
         for ball1 in ball_array:
             ball1.ballWillBeGrabbed = True 
@@ -162,3 +177,27 @@ class PgPowerUp(PowerUp):
             ball1.ballWillBeGrabbed = False
         return super().deactivatePowerUp(paddle1, ball_array)
 
+class ShPPowerUp(PowerUp): # shooting paddle
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.shape = config.ShP_POWERUP_SHAPE
+        self.type = 'ShP'
+    def activatePowerUp(self, paddle1, ball1):
+        paddle1.width = paddle1.width
+        temp = list(paddle1.shape)
+        temp[0] = 'Y'
+        temp[-1] = 'Y'
+        for i in range(1, paddle1.width - 1):
+            temp[i] = '+'
+        paddle1.shape = ''.join(temp)
+        #paddle1.shape[0] = 'Y'
+        #paddle1.shape[-1] = 'Y'
+        #for i in range(1, paddle1.width - 1):
+            #paddle1.shape[i] = '+'
+        paddle1.shooting = True
+        super().activatePowerUp(paddle1, ball1)
+    def deactivatePowerUp(self, paddle1, ball1):
+        paddle1.width = config.PADDLE_WIDTH
+        paddle1.shape = config.PADDLE_SHAPE
+        paddle1.shooting = False
+        return super().deactivatePowerUp(paddle1, ball1)
