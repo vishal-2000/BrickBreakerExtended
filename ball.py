@@ -30,7 +30,7 @@ class Ball:
 
     def handleExplodingBrickCollision(self, brick_array, brick1, powerup_array):
         config.SCORE += brick1.strength * 10
-        powerup = brick1.brickSmash()
+        powerup = brick1.brickSmash(self.velX, self.velY)
         if powerup!=None:
             powerup_array.append(powerup)
         q = Queue()
@@ -51,7 +51,7 @@ class Ball:
                         #print('Hi --->')
                         q.put(brick)
                     config.SCORE += brick.strength * 10
-                    powerup = brick.brickSmash()
+                    powerup = brick.brickSmash(self.velX, self.velY)
                     if powerup!=None:
                         powerup_array.append(powerup)
 
@@ -68,7 +68,7 @@ class Ball:
                         else:
                             if brick.color!="WHITE":
                                 config.SCORE = config.SCORE + 10 * brick.strength
-                            powerup = brick.brickSmash()
+                            powerup = brick.brickSmash(self.velX, self.velY)
                             if powerup!=None:
                                 powerup_array.append(powerup)
                             continue
@@ -77,7 +77,7 @@ class Ball:
                     if brick.color == "YELLOW":
                         self.handleExplodingBrickCollision(brick_array, brick, powerup_array)
                     else:
-                        powerup = brick.handleCollision() 
+                        powerup = brick.handleCollision(self.velX, self.velY) 
                         if powerup!=None:
                             powerup_array.append(powerup)
                         if brick.color != "WHITE":
@@ -90,7 +90,7 @@ class Ball:
                         else:
                             if brick!="WHITE":
                                 config.SCORE = config.SCORE + 10 * brick.strength
-                            powerup = brick.brickSmash()
+                            powerup = brick.brickSmash(self.velX, self.velY)
                             if powerup!=None:
                                 powerup_array.append(powerup)
                             continue
@@ -99,7 +99,7 @@ class Ball:
                     if brick.color == "YELLOW":
                         self.handleExplodingBrickCollision(brick_array, brick, powerup_array)
                     else:
-                        powerup = brick.handleCollision()
+                        powerup = brick.handleCollision(self.velX, self.velY)
                         if powerup!=None:
                             powerup_array.append(powerup)
                         if brick.color != "WHITE":

@@ -19,6 +19,13 @@ The Brick Breaker Game using python3 and OOPS concepts (DASS course assignment (
 - In each level, you will be given 100 frames time. After crossing 100th frame, the bricks will drif downward every time your ball hits your paddle
 - The moment a brick comes close enough to your paddle in such a way that paddle's locomotive freedom is restricted, then the game ends. It is a GAMEOVER scenario
 
+### Rainbow bricks
+- These bricks keep changing their colors at certain rate. They stop changing colors as soon as they are hit by the ball
+
+### Powerups 2.0
+- Acceleration due to gravity added
+- The powerups initial velocity will be same as that of the ball when it hits the brick
+
 ## How to run the game
 ### Dependencies
 - Python 3
@@ -60,6 +67,7 @@ The Brick Breaker Game using python3 and OOPS concepts (DASS course assignment (
 - Blue bricks will break after 2 collisions
 - Green bricks will break after 1 collision
 - Yellow bricks called exploding bricks break after 1 collision and break all the bricks adjacent or diagonal to them
+- Rainbow bricks - These bricks keep changing their colors at certain rate. They stop changing colors as soon as they are hit by the ball (strength will also change in accordance with the color)
 
 ## Powerups
 Catch the powerups with the paddle to activate them (they are hidden in the breaks and start falling down once the corresponding bricks are broken)

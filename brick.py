@@ -17,8 +17,9 @@ class Brick:
             if config.FRAME_COUNT_PER_LEVEL > config.FALLING_BRICK_FRAME_NUMBER:
                 self.y = self.y + 1
                 if self.y >= config.PADDLE_INITIAL_POS[1]:
-                    from miscellaneous import gameOver
-                    gameOver()
+                    if self.color != "NONE":
+                        from miscellaneous import gameOver
+                        gameOver()
 
     def colorChange(self): # used to decrease color on collision
         if self.color == "RED": 
@@ -30,28 +31,28 @@ class Brick:
             #self.x = 0
             #self.y = 0
 
-    def handleCollision(self):
+    def handleCollision(self, velx, vely):
         if self.color == "WHITE" or self.color == "NONE":
             return
         if self.color == "GREEN" or self.color == "YELLOW":
             self.color = "NONE"
             self.broken = "YES"
             if self.powerup_associated!=None:
-                (self.powerup_associated).releasePowerUp()
+                (self.powerup_associated).releasePowerUp(velx, vely)
                 return self.powerup_associated
         elif self.color == "BLUE":
             self.color = "GREEN"
         elif self.color == "RED":
             self.color = "BLUE"
         self.strength -= 1
-    def brickSmash(self): # used in case of thru ball
+    def brickSmash(self, velx, vely): # used in case of thru ball
         if self.color == "NONE":
             return None
         self.color = "NONE"
         self.broken = "YES"
         self.strength = 0
         if self.powerup_associated!=None:
-                (self.powerup_associated).releasePowerUp()
+                (self.powerup_associated).releasePowerUp(velx, vely)
                 return self.powerup_associated
 
 
@@ -86,9 +87,9 @@ class RainbowBrick(Brick):
         self.color = "RED"
         self.type = "RAINBOW" # type changes to normal the moment the block gets hit by the ball
 
-    def handleCollision(self):
+    def handleCollision(self, velx, vely):
         self.type = "NORMAL"
-        return super().handleCollision()
+        return super().handleCollision( velx, vely)
 
     def changeColor(self):
         if self.type != "RAINBOW" or config.FRAME_COUNT%config.RAINBOW_COLOR_CHANGE_RATE != 0:

@@ -13,6 +13,7 @@ class PowerUp:
     def movePowerUp(self):
         if self.appear==False:
             return
+
         if self.velX !=0:
             #print('VelX = ',self.velX)
             if int(abs(config.FRAME_RATE//self.velX))==0:
@@ -26,6 +27,13 @@ class PowerUp:
                 exit(1)
             if config.FRAME_COUNT%abs(config.FRAME_RATE//self.velY) == 0:
                 self.y = self.y + int(1*(abs(self.velY)//self.velY))
+        if self.velY < config.FRAME_RATE and self.velY >= -config.FRAME_RATE:
+            if config.ACCELERATION_DUE_TO_GRAVITY != 0:
+                if abs(config.FRAME_RATE//config.ACCELERATION_DUE_TO_GRAVITY)==0:
+                    print("Invalid Acceleration please check2 :", config.ACCELERATION_DUE_TO_GRAVITY)
+                elif config.FRAME_COUNT%abs(config.FRAME_RATE//config.ACCELERATION_DUE_TO_GRAVITY) == 0:
+                    self.velY += config.ACCELERATION_DUE_TO_GRAVITY
+
     def activatePowerUp(self, paddle1, ball1):
         self.velX = 0
         self.velY = 0
@@ -36,19 +44,33 @@ class PowerUp:
         if self.active==False:
             return
         self.active = False
-    def releasePowerUp(self):
+    def releasePowerUp(self, velx = config.POWERUP_VEL[0], vely = config.POWERUP_VEL[0]):
         self.appear = True
-        self.velX = config.POWERUP_VEL[0]
-        self.velY = config.POWERUP_VEL[1]
+        self.velX = velx
+        self.velY = vely
     def checkCollision(self, paddle1, ball1):
         if self.appear==False:
             return
+
+        if self.y == 1 and self.velY < 0:
+            #self.y = 2
+            #print("Hi man is gameover=", game_over)
+            self.velY = -1 * self.velY
+        if self.x == 1 and self.velX < 0:
+            #self.x = 2
+            self.velX = -1 * self.velX
+        if self.x == config.FRAME_WIDTH - 4 and self.velX > 0:
+            #self.x = config.FRAME_WIDTH - 4
+            self.velX = -1 * self.velX
+        
+        # Paddle collision
         if self.y == paddle1.y-1: # powerup collides the upside of the paddle
             if (self.x < (paddle1.x + paddle1.width)) and self.x > paddle1.x-config.POWERUP_WIDTH and self.velY > 0:
                 # stop the power up
                 self.velY = 0
                 self.appear = False # dissapear the powerup
                 self.activatePowerUp(paddle1, ball1)
+        # Lower wall collision
         if self.y >= config.FRAME_HEIGHT - 2:
             # stop the power up
             self.velY = 0
